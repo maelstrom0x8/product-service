@@ -1,0 +1,66 @@
+buildscript {
+    dependencies {
+        classpath 'org.postgresql:postgresql:42.6.0'
+        classpath 'org.flywaydb:flyway-database-postgresql:10.4.1'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.2'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id "org.flywaydb.flyway" version '10.0.0'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+group = 'com.marktplatz'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/postgres'
+    password = 'postgres'
+    user = 'postgres'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat('1.17.0')
+        licenseHeaderFile "${rootDir}/gradle/spotless.java.license.txt"
+        ratchetFrom 'origin/master'
+        trimTrailingWhitespace()
+        endWithNewline()
+        targetExclude '**/Tmp*.java'
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        greclipse()
+        indentWithSpaces(2)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
