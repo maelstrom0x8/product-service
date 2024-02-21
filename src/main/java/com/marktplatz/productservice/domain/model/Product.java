@@ -1,80 +1,98 @@
+/*
+ * Copyright (C) 2024 Emmanuel Godwin
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.marktplatz.productservice.domain.model;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.CurrentTimestamp;
 
 @Entity
 @Table(name = "products")
 public class Product {
 
-    @Id
-    @GeneratedValue(generator = "id_seq", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "id_seq", sequenceName = "product_id_seq")
-    private Long id;
+  @Id
+  @GeneratedValue(generator = "id_seq", strategy = GenerationType.SEQUENCE)
+  @SequenceGenerator(name = "id_seq", sequenceName = "product_id_seq")
+  private Long id;
 
-    @Column(nullable = false, length = 100, unique = true)
-    private String name;
-    private String description;
+  @Column(nullable = false, length = 100, unique = true)
+  private String name;
 
-    @CreationTimestamp
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+  @Column(length = 1000)
+  private String description;
 
-    @Column(nullable = false)
-    private LocalDateTime lastModified;
+  @CreationTimestamp
+  @Column(nullable = false, insertable = false, updatable = false)
+  private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private boolean available;
+  @Column(nullable = false)
+  @CurrentTimestamp
+  private LocalDateTime lastModified;
 
-    public Product(String name, String description, boolean available) {
-        this.name = name;
-        this.description = description;
-        this.available = available;
-    }
+  @Column(nullable = false)
+  private boolean available;
 
-    public Long getId() {
-        return id;
-    }
+  public Product(String name, String description, boolean available) {
+    this.name = name;
+    this.description = description;
+    this.available = available;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
 
-    public LocalDateTime getLastModified() {
-        return lastModified;
-    }
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
 
-    public void setLastModified(LocalDateTime lastModified) {
-        this.lastModified = lastModified;
-    }
+  public LocalDateTime getLastModified() {
+    return lastModified;
+  }
 
-    public boolean isAvailable() {
-        return available;
-    }
+  public void setLastModified(LocalDateTime lastModified) {
+    this.lastModified = lastModified;
+  }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
+  public boolean isAvailable() {
+    return available;
+  }
+
+  public void setAvailable(boolean available) {
+    this.available = available;
+  }
 }

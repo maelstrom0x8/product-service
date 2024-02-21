@@ -1,0 +1,10 @@
+CREATE SEQUENCE product_id_seq START 400 INCREMENT 1;
+
+CREATE TABLE products (
+    product_id BIGINT DEFAULT nextval('product_id_seq') PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description VARCHAR(1000),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    available BOOL NOT NULL DEFAULT FALSE
+);
