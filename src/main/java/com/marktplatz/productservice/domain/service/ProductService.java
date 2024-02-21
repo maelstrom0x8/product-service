@@ -15,9 +15,10 @@
  */
 package com.marktplatz.productservice.domain.service;
 
+import com.marktplatz.productservice.config.ApplicationProperties;
 import com.marktplatz.productservice.domain.model.Product;
 import com.marktplatz.productservice.domain.repository.ProductRepository;
-import java.util.Collections;
+import jakarta.transaction.NotSupportedException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,11 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
   private final ProductRepository productRepository;
+  private final ApplicationProperties properties;
 
-  public ProductService(ProductRepository productRepository) {
+  public ProductService(ProductRepository productRepository, ApplicationProperties properties) {
     this.productRepository = productRepository;
+    this.properties = properties;
   }
 
-  public List<Product> getAllProducts(int count, int offset) {
-    return Collections.emptyList();
-  }
 }

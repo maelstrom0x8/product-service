@@ -9,31 +9,36 @@ plugins {
   id 'java'
   id 'org.springframework.boot' version '3.2.2'
   id 'io.spring.dependency-management' version '1.1.4'
+  id 'org.graalvm.buildtools.native' version '0.9.28'
   id "org.flywaydb.flyway" version '10.0.0'
   id 'com.diffplug.spotless' version '6.25.0'
+  id 'com.palantir.git-version' version '0.15.0'
+  id "com.google.osdetector" version "1.7.3"
 }
 
 group = 'com.marktplatz'
-version = '0.0.1-SNAPSHOT'
+version = gitVersion()
 
 java {
   sourceCompatibility = '17'
-}
-
-flyway {
-  url = 'jdbc:postgresql://localhost:5432/postgres'
-  password = 'postgres'
-  user = 'postgres'
 }
 
 repositories {
   mavenCentral()
 }
 
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
+
 dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
   implementation 'org.springframework.boot:spring-boot-starter-data-redis'
   implementation 'org.springframework.boot:spring-boot-starter-web'
+  implementation 'org.springframework.boot:spring-boot-starter-actuator'
+  annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
   runtimeOnly 'org.postgresql:postgresql'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.boot:spring-boot-testcontainers'
@@ -43,6 +48,11 @@ dependencies {
 
 test {
   useJUnitPlatform()
+  testLogging {
+    events = ["PASSED", "FAILED", "SKIPPED"]
+    showStandardStreams = true
+    exceptionFormat = "full"
+  }
 }
 
 
@@ -63,4 +73,10 @@ spotless {
     trimTrailingWhitespace()
     endWithNewline()
   }
+}
+
+tasks.named("bootBuildImage") {
+  builder = "dashaun/builder:tiny"
+  environment = ["BP_NATIVE_IMAGE": "true"]
+  imageName = "maelstrom0x8/${rootProject.getName()}:${project.version}-${osdetector.arch}"
 }

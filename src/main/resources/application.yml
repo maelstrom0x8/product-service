@@ -12,3 +12,4 @@ spring:
       host: ${REDIS_HOST}
   jpa:
     show-sql: true
+

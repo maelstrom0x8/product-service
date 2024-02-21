@@ -3,6 +3,3 @@ spring:
     url: jdbc:tc:postgresql:16:///postgres
     username: user
     password: user
-  jpa:
-    hibernate:
-      ddl-auto: 'create'
