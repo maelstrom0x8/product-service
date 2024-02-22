@@ -15,15 +15,15 @@ jobs:
       - sdkman/sdkman-install:
           candidate: java
           version: 17.0.8-graalce
-      - run:
+      - run:1
           name: "bootBuildImage"
-          command: "./gradlew -Pnative bootBuildImage -DskipTests"
+          command: "./gradlew bootBuildImage -x test"
       - docker/check:
           docker-username: DOCKER_LOGIN
           docker-password: DOCKER_PASSWORD
       - docker/push:
           image: maelstrom0x8/mp-product-service
-          tag: $CIRCLE_TAG-x86_64
+          tag: $CIRCLE_TAG
 
 workflows:
   build-native-image:
