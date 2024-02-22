@@ -15,7 +15,7 @@ jobs:
       - sdkman/sdkman-install:
           candidate: java
           version: 17.0.8-graalce
-      - run:1
+      - run:
           name: "bootBuildImage"
           command: "./gradlew bootBuildImage -x test"
       - docker/check:
