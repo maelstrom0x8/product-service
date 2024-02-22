@@ -78,5 +78,5 @@ spotless {
 tasks.named("bootBuildImage") {
   builder = "dashaun/builder:tiny"
   environment = ["BP_NATIVE_IMAGE": "true"]
-  imageName = "maelstrom0x8/${rootProject.getName()}:${project.version}"
+  imageName = "maelstrom0x8/marktplatz-${rootProject.getName()}:${project.version}"
 }

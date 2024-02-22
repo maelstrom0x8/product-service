@@ -22,7 +22,7 @@ jobs:
           docker-username: DOCKER_LOGIN
           docker-password: DOCKER_PASSWORD
       - docker/push:
-          image: maelstrom0x8/mp-product-service
+          image: maelstrom0x8/marktplatz-product-service
           tag: $CIRCLE_TAG
 
 workflows:
