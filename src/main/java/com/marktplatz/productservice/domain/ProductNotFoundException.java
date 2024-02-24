@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.marktplatz.productservice.config;
+package com.marktplatz.productservice.domain;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ConfigurationProperties(prefix = "marktplatz")
-@Configuration
-public class ApplicationProperties {
-  private int productsPerPage;
+@ResponseStatus(reason = "Product does not exist", value = HttpStatus.NOT_FOUND)
+public class ProductNotFoundException extends RuntimeException {
+
+  public ProductNotFoundException() {
+    super();
+  }
 }

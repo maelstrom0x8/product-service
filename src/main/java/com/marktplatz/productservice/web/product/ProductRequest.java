@@ -13,13 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.marktplatz.productservice.config;
+package com.marktplatz.productservice.web.product;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-
-@ConfigurationProperties(prefix = "marktplatz")
-@Configuration
-public class ApplicationProperties {
-  private int productsPerPage;
-}
+public record ProductRequest(String name, String description) {}

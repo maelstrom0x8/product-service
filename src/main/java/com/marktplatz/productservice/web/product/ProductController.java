@@ -15,9 +15,12 @@
  */
 package com.marktplatz.productservice.web.product;
 
+import com.marktplatz.productservice.domain.ProductNotFoundException;
+import com.marktplatz.productservice.domain.model.Product;
 import com.marktplatz.productservice.domain.service.ProductService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.Collection;
+import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -27,5 +30,31 @@ public class ProductController {
 
   public ProductController(ProductService productService) {
     this.productService = productService;
+  }
+
+  @GetMapping
+  public List<Product> fetchAll() {
+    return productService.getAllProducts();
+  }
+
+  @GetMapping("/{productId}")
+  public Product fetchById(@PathVariable Long productId) {
+    return productService.getProductById(productId);
+  }
+
+  @PostMapping("/new")
+  public Product post(ProductRequest product) {
+    return productService.save(product.name(), product.description());
+  }
+
+  @DeleteMapping("/{productId}")
+  public void deleteProduct(Long productId) {
+    productService.deleteProductById(productId);
+  }
+
+  @PostMapping("/{productId}")
+  public Product addImageUrls(@PathVariable Long productId, @RequestBody Collection<String> urls)
+      throws ProductNotFoundException {
+    return productService.addImages(productId, urls);
   }
 }

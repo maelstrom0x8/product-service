@@ -18,6 +18,10 @@ package com.marktplatz.productservice.domain.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 
+import com.marktplatz.productservice.domain.model.Product;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -37,5 +41,32 @@ public class ProductRepositoryTest {
   void initialProductCount() {
     long count = productRepository.count();
     assertThat(count).isEqualTo(8);
+  }
+
+  @Test
+  public void productLastModifiedTimestampUpdate() {
+    Product product = productRepository.findById(403L).orElseThrow();
+    LocalDateTime lastModified = product.getLastModified();
+
+    product.setName("Sony HDRXC");
+    productRepository.saveAndFlush(product);
+
+    assertThat(product).isNotNull();
+    assertThat(product.getLastModified()).isAfter(lastModified);
+  }
+
+  @Test
+  public void canAddUniqueImageUrlsToProduct() {
+    Set<String> urls = new HashSet<>();
+    urls.add("https://image_one");
+    urls.add("https://image_two");
+
+    Product product = productRepository.findById(402L).orElseThrow();
+
+    product.setImageUrls(urls);
+    productRepository.saveAndFlush(product);
+
+    Set<String> savedUrls = product.getImageUrls();
+    assertThat(savedUrls).containsAll(urls);
   }
 }

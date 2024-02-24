@@ -2,14 +2,14 @@ spring:
   application:
     name: marktplatz-product-service
   datasource:
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    url: ${DB_URL}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DATABASE:postgres}
     driver-class-name: org.postgresql.Driver
   data:
     redis:
-      port: ${REDIS_PORT}
-      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      host: ${REDIS_HOST:localhost}
   jpa:
     show-sql: true
 

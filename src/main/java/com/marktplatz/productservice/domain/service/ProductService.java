@@ -16,9 +16,13 @@
 package com.marktplatz.productservice.domain.service;
 
 import com.marktplatz.productservice.config.ApplicationProperties;
+import com.marktplatz.productservice.domain.ProductNotFoundException;
 import com.marktplatz.productservice.domain.model.Product;
 import com.marktplatz.productservice.domain.repository.ProductRepository;
+import com.marktplatz.productservice.web.product.ProductRequest;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,9 +41,7 @@ public class ProductService {
   }
 
   public Product getProductById(Long id) {
-    return productRepository
-        .findById(id)
-        .orElseThrow(() -> new RuntimeException("Product does not exist"));
+    return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
   }
 
   public Product save(String name, String description) {
@@ -53,5 +55,21 @@ public class ProductService {
 
   public void deleteProductById(Long id) {
     productRepository.deleteById(id);
+  }
+
+  public List<Product> saveAll(List<ProductRequest> products) {
+    return productRepository.saveAll(
+        products.stream()
+            .map(e -> new Product(e.name(), e.description()))
+            .collect(Collectors.toList()));
+  }
+
+  public Product addImages(Long productId, Collection<String> urls)
+      throws ProductNotFoundException {
+    Product product =
+        productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+
+    product.getImageUrls().addAll(urls);
+    return productRepository.save(product);
   }
 }

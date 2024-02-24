@@ -17,8 +17,8 @@ package com.marktplatz.productservice.domain.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.CurrentTimestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -40,13 +40,27 @@ public class Product {
   @Column(length = 1000)
   private String description;
 
-  @CreationTimestamp
   @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
   @Column(nullable = false)
-  @CurrentTimestamp
   private LocalDateTime lastModified;
+
+  @ElementCollection
+  @CollectionTable(name = "images", joinColumns = @JoinColumn(name = "product_id"))
+  @Column(name = "url", unique = true, nullable = false)
+  private Set<String> imageUrls = new HashSet<>();
+
+  @PrePersist
+  public void onInsert() {
+    createdAt = LocalDateTime.now();
+    lastModified = createdAt;
+  }
+
+  @PreUpdate
+  public void onUpdate() {
+    lastModified = LocalDateTime.now();
+  }
 
   public Product() {}
 
@@ -89,5 +103,13 @@ public class Product {
 
   public void setLastModified(LocalDateTime lastModified) {
     this.lastModified = lastModified;
+  }
+
+  public Set<String> getImageUrls() {
+    return imageUrls;
+  }
+
+  public void setImageUrls(Set<String> imageUrls) {
+    this.imageUrls = imageUrls;
   }
 }

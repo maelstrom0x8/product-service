@@ -17,10 +17,13 @@ package com.marktplatz.productservice.config;
 
 import java.time.Duration;
 import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -30,15 +33,14 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 @Configuration
 public class CacheConfiguration {
 
-  @Value("${spring.data.redis.port}")
-  private int REDIS_PORT;
-
-  @Value("${spring.data.redis.host}")
-  private String REDIS_HOST;
+  @Autowired
+  private Environment environment;
 
   @Bean
   LettuceConnectionFactory lettuceConnectionFactory() {
-    return new LettuceConnectionFactory(new RedisStandaloneConfiguration(REDIS_HOST, REDIS_PORT));
+    var port = Integer.parseInt(environment.getProperty("spring.data.redis.port"));
+    String host = environment.getProperty("spring.data.redis.host");
+    return new LettuceConnectionFactory(new RedisStandaloneConfiguration(host, port));
   }
 
   @Bean

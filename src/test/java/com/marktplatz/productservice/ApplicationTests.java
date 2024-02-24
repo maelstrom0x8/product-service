@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.marktplatz.productservice.config;
+package com.marktplatz.productservice;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
-@ConfigurationProperties(prefix = "marktplatz")
-@Configuration
-public class ApplicationProperties {
-  private int productsPerPage;
+@SpringBootTest
+@TestPropertySource(properties = {"spring.datasource.url=jdbc:tc:postgresql:15:///test"})
+class ApplicationTests {
+
+  @Test
+  void contextLoads() {}
 }
