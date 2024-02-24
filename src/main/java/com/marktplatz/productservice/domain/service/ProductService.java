@@ -18,7 +18,6 @@ package com.marktplatz.productservice.domain.service;
 import com.marktplatz.productservice.config.ApplicationProperties;
 import com.marktplatz.productservice.domain.model.Product;
 import com.marktplatz.productservice.domain.repository.ProductRepository;
-import jakarta.transaction.NotSupportedException;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +32,26 @@ public class ProductService {
     this.properties = properties;
   }
 
+  public List<Product> getAllProducts() {
+    return productRepository.findAll();
+  }
+
+  public Product getProductById(Long id) {
+    return productRepository
+        .findById(id)
+        .orElseThrow(() -> new RuntimeException("Product does not exist"));
+  }
+
+  public Product save(String name, String description) {
+    Product product = new Product(name, description);
+    return productRepository.save(product);
+  }
+
+  public void addAll(List<Product> products) {
+    productRepository.saveAll(products);
+  }
+
+  public void deleteProductById(Long id) {
+    productRepository.deleteById(id);
+  }
 }

@@ -26,7 +26,12 @@ public class Product {
 
   @Id
   @GeneratedValue(generator = "id_seq", strategy = GenerationType.SEQUENCE)
-  @SequenceGenerator(name = "id_seq", sequenceName = "product_id_seq")
+  @SequenceGenerator(
+      name = "id_seq",
+      sequenceName = "products_id_seq",
+      allocationSize = 1,
+      initialValue = 400)
+  @Column(name = "product_id")
   private Long id;
 
   @Column(nullable = false, length = 100, unique = true)
@@ -36,20 +41,18 @@ public class Product {
   private String description;
 
   @CreationTimestamp
-  @Column(nullable = false, insertable = false, updatable = false)
+  @Column(nullable = false, updatable = false)
   private LocalDateTime createdAt;
 
   @Column(nullable = false)
   @CurrentTimestamp
   private LocalDateTime lastModified;
 
-  @Column(nullable = false)
-  private boolean available;
+  public Product() {}
 
-  public Product(String name, String description, boolean available) {
+  public Product(String name, String description) {
     this.name = name;
     this.description = description;
-    this.available = available;
   }
 
   public Long getId() {
@@ -86,13 +89,5 @@ public class Product {
 
   public void setLastModified(LocalDateTime lastModified) {
     this.lastModified = lastModified;
-  }
-
-  public boolean isAvailable() {
-    return available;
-  }
-
-  public void setAvailable(boolean available) {
-    this.available = available;
   }
 }

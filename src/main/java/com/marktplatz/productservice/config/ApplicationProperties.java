@@ -18,6 +18,4 @@ package com.marktplatz.productservice.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "marktplatz")
-public class ApplicationProperties {
-  private int productsPerPage;
-}
+public record ApplicationProperties(int productsPerPage) {}
